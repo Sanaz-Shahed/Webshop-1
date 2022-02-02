@@ -1,12 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+
+<?php
+class Subscriber {
+    /* properties */
+    public $email;
+    public $fName;
+    public $lName;
     
-</body>
-</html>
+    function __construct($email, $fName, $lName) {
+        
+        $this->email = $email;
+        $this->fName = $fName;
+        $this->lName = $lName;
+    }
+    public static function fromRow($row){
+        return new Subscriber(
+            $row['email'],
+            $row['fName'],
+            $row['lName'],
+        );
+    }
+
+    public function create() {
+        $database = new Database(); 
+        error_log("make_Newsletter_subscription_OOP");
+
+        $sth = $database->connection->prepare('INSERT INTO subscription (email, fName, lName)
+        VALUES (:email, :fName, :lName)');
+        $sth->execute(array(':email' => $this->email, ':fName' => $this->fName, ':lName' => $this->lName));
+   
+    }
+ }
+
+?>
